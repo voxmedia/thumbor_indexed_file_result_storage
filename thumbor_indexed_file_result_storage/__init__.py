@@ -14,7 +14,7 @@ class Storage(FileStorage):
     redis_connection = None
 
     def __init__(self, context):
-        super().__init__(self, context)
+        super(Storage, self).__init__(context)
         self.redis_connection = self.reconnect_redis()
 
     def reconnect_redis(self):
@@ -29,6 +29,6 @@ class Storage(FileStorage):
 
     def put(self, bytes):
         file_abspath = self.normalize_path(self.context.request.url)
-        timestamp = int(time.time())
-        redis_connection.zadd("result_storage_creation_time", timestamp, file_abspath)
-        super().put(self, bytes)
+        timestamp = float(time.time())
+        self.redis_connection.zadd("result_storage_creation_time", file_abspath, timestamp)
+        super(Storage, self).put(bytes)
