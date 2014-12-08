@@ -8,14 +8,17 @@
 import time
 from redis import Redis, RedisError
 from thumbor.result_storages.file_storage import Storage as FileStorage
+from subprocess import call
 
 class Storage(FileStorage):
 
     redis_connection = None
+    hostname = None
 
     def __init__(self, context):
         super(Storage, self).__init__(context)
         self.redis_connection = self.reconnect_redis()
+        self.hostname = call["hostname"]
 
     def reconnect_redis(self):
       if not Storage.redis_connection:
@@ -30,5 +33,9 @@ class Storage(FileStorage):
     def put(self, bytes):
         file_abspath = self.normalize_path(self.context.request.url)
         timestamp = float(time.time())
-        self.redis_connection.zadd("result_storage_creation_time", file_abspath, timestamp)
+        self.redis_connection.zadd(
+            "result_storage_creation_time" + ":" + self.hostname,
+            file_abspath,
+            timestamp
+        )
         super(Storage, self).put(bytes)
