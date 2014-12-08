@@ -8,7 +8,7 @@
 import time
 from redis import Redis, RedisError
 from thumbor.result_storages.file_storage import Storage as FileStorage
-from subprocess import call
+import socket
 
 class Storage(FileStorage):
 
@@ -18,7 +18,7 @@ class Storage(FileStorage):
     def __init__(self, context):
         super(Storage, self).__init__(context)
         self.redis_connection = self.reconnect_redis()
-        self.hostname = call(["hostname"])
+        self.hostname = socket.gethostname()
 
     def reconnect_redis(self):
       if not Storage.redis_connection:
