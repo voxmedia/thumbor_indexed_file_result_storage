@@ -18,7 +18,7 @@ class Storage(FileStorage):
     def __init__(self, context):
         super(Storage, self).__init__(context)
         self.redis_connection = self.reconnect_redis()
-        self.hostname = call["hostname"]
+        self.hostname = call(["hostname"])
 
     def reconnect_redis(self):
       if not Storage.redis_connection:
