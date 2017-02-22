@@ -1,3 +1,5 @@
+**Deprecated:** We no longer use this plugin or any result storage at all. That's handled by a local Varnish + CDN.
+
 # Thumbor Indexed File Result Storage
 
 This Thumbor result storage plugin indexes the creation time of result storage files
